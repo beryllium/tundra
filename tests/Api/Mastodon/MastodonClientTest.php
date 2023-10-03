@@ -8,7 +8,7 @@ class MastodonClientTest extends TestCase
 {
     public function testMastodonClient(): void
     {
-        $client = new MastodonClient();
+        $client = new MastodonClient('example.com');
 
         self::assertInstanceOf(MastodonClient::class, $client);
     }

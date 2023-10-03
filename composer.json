@@ -18,6 +18,9 @@
             "Whateverthing\\Tundra\\": "src/"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "authors": [
         {
             "name": "Kevin Boyd",

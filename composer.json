@@ -19,7 +19,7 @@
         }
     },
     "scripts": {
-        "test": "source .env.test && vendor/bin/phpunit"
+        "test": "touch .env && vendor/bin/phpunit"
     },
     "authors": [
         {

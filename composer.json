@@ -19,7 +19,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "source .env.test && vendor/bin/phpunit"
     },
     "authors": [
         {

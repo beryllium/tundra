@@ -8,6 +8,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Whateverthing\Tundra\Api\Mastodon\Entities\Status;
 use Whateverthing\Tundra\Api\Mastodon\MastodonClient;
 
 class TimelineCommand extends Command
@@ -40,11 +41,7 @@ class TimelineCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Nothing to do yet.');
-
         $options = $input->getOptions();
-
-        $output->writeln(print_r($options, true));
 
         $result = $this->client->request(
             apiMethod: 'timelines/' . $options['timeline'],
@@ -56,26 +53,23 @@ class TimelineCommand extends Command
             minId: $options['min-id'] ?? null,
             listId: $options['list-id'] ?? null,
             server: $options['server'] ?? null,
+            limit: $options['limit'] ?? null,
         );
 
         $table = new Table($output);
         $table->setHeaders(['Key', 'Value']);
 
         foreach ($result as $row) {
-            foreach ($row as $key => $value) {
-                if ($value instanceof \stdClass) {
-                    $value = (array) $value;
-                }
-                if ($key === 'account') {
-                    $value = ['id' => $value['id'], 'username' => $value['username'], 'acct' => $value['acct']];
-                }
-                $table->addRow([$key, substr(var_export($value, true), 0, 50)]);
+            $post = new Status(...$row);
+
+            foreach ($post->simpleArray() as $key => $value) {
+                $table->addRow([$key, $value]);
             }
+
             $table->addRow(new TableSeparator());
         }
-
+        $table->setColumnMaxWidth(1, 80);
         $table->render();
-
 
         return self::SUCCESS;
     }

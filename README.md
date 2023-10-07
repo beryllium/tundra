@@ -12,18 +12,24 @@ Tundra is a PHP-based command-line client for Mastodon.
 tundra mastodon:timeline --limit 2
 ```
 
-Limit isn't actually working yet. Coming soon.
-
-Almost nothing is working, in fact, except for fetching the latest 20 public posts.
+Almost nothing is implemented so far, except for fetching the latest public
+posts and displaying them in a table.
 
 ## Installation
 
-(Pretty much none of this is working yet.)
+Tundra requires PHP 8.1 or higher.
+
+To get started, clone it and install dependencies:
 
 ```
 git clone git@github.com:beryllium/tundra.git
 cd tundra
 composer install
+```
+
+At this point, we begin to get hypothetical (not yet implemented):
+
+```
 bin/tundra configure
 bin/tundra mastodon:auth
 ```
@@ -35,6 +41,9 @@ Right now, the .env file should look like:
 ```
 MASTODON_SERVER=your.mastodon.instance
 ```
+
+To test out tundra in its current form, make a `.env` file like the above and
+enter your own instance's domain as the MASTODON_SERVER value.
 
 ## Authentication
 

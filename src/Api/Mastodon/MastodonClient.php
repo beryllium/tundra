@@ -79,8 +79,8 @@ class MastodonClient
             ]
         ];
 
-        if ($this->clientAccessToken) {
-            $context['http']['header'] = 'Authorization: Bearer ' . $this->clientAccessToken . "\r\n";
+        if ($this->userAccessToken || $this->clientAccessToken) {
+            $context['http']['header'] = 'Authorization: Bearer ' . ($this->userAccessToken ?? $this->clientAccessToken) . "\r\n";
         }
 
         if ('POST' === $httpMethod) {

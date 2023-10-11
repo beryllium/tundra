@@ -69,6 +69,52 @@ class MastodonClient
         return json_decode($result, true);
     }
 
+    /**
+     * Examines the headers of the previous request, looking for a Link header.
+     *
+     * Returns a processed Link array
+     *
+     * @return array
+     */
+    public function getPaginationLinks(): array
+    {
+        $linkHeader = null;
+        foreach ($this->lastRequestHeaders as $header) {
+            if (!str_starts_with($header, 'Link: ')) {
+                continue;
+            }
+
+            $linkHeader = $header;
+            break;
+        }
+
+        if (!$linkHeader) {
+            return [];
+        }
+
+        /*
+            the rules: https://docs.joinmastodon.org/api/guidelines/#pagination
+
+            1. The links will be returned all via one Link header, separated by a comma and a space (, )
+            2. Each link consists of a URL and a link relation, separated by a semicolon and a space (; )
+            3. The URL will be surrounded by angle brackets (<>), and the link relation will be surrounded by double quotes ("") and prefixed with rel=.
+            4. The value of the link relation will be either prev or next.
+
+            Following the next link should show you older results. Following the prev link should show you newer results.
+         */
+        $matches = [];
+        $result = preg_match('/Link: <([^>]*)>; rel="([a-z]*)", <([^>]*)>; rel="([a-z]*)"/', $linkHeader, $matches);
+
+        if (!$result || count($matches) !== 5) {
+            return [];
+        }
+
+        return [
+            $matches[2] => $matches[1], // "next"
+            $matches[4] => $matches[3], // "prev"
+        ];
+    }
+
     private function buildContextFromArgs(array $args): mixed
     {
         $httpMethod = strtoupper($args['httpMethod'] ?? 'GET');

@@ -20,6 +20,7 @@
 
 use League\Container\Container;
 use Symfony\Component\Console\Application;
+use Whateverthing\Tundra\Commands\Mastodon\Account\BookmarksCommand;
 use Whateverthing\Tundra\Commands\Mastodon\AuthCommand;
 use Whateverthing\Tundra\Commands\Mastodon\Timeline\TimelineCommand;
 
@@ -31,5 +32,6 @@ $console = new Application('Tundra');
 // Look into CommandLoaderInterface for this
 $console->add($app->get(AuthCommand::class));
 $console->add($app->get(TimelineCommand::class));
+$console->add($app->get(BookmarksCommand::class));
 
 $console->run();

@@ -15,6 +15,8 @@ class MastodonClient
     public const CONFIG_CLIENT_ACCESS_TOKEN = 'MASTODON_CLIENT_ACCESS_TOKEN';
     public const CONFIG_USER_TOKEN = 'MASTODON_USER_TOKEN';
 
+    protected array $lastRequestHeaders = [];
+
     public function __construct(
         public string $server,
         public ?string $username = null,
@@ -62,6 +64,7 @@ class MastodonClient
         }
 
         $result = file_get_contents($url, context: $context);
+        $this->lastRequestHeaders = $http_response_header ?? []; // This is some PHP magic: https://www.php.net/manual/en/reserved.variables.httpresponseheader.php
 
         return json_decode($result, true);
     }

@@ -43,16 +43,20 @@ class TimelineCommand extends Command
     {
         $options = $input->getOptions();
 
+        $apiMethod = 'timelines/' . $options['timeline'];
+        if (isset($options['list-id'])) {
+            $apiMethod .= '/' . $options['list-id'];
+        }
+
         $result = $this->client->request(
-            apiMethod: 'timelines/' . $options['timeline'],
+            server: $options['server'] ?? null,
+            apiMethod: $apiMethod,
             local: (bool) ($options['only-local'] ?? false),
             remote: (bool) ($options['only-remote'] ?? false),
-            onlyMedia: (bool) ($options['only-media'] ?? false),
-            maxId: $options['max-id'] ?? null,
-            sinceId: $options['since-id'] ?? null,
-            minId: $options['min-id'] ?? null,
-            listId: $options['list-id'] ?? null,
-            server: $options['server'] ?? null,
+            only_media: (bool) ($options['only-media'] ?? false),
+            max_id: $options['max-id'] ?? null,
+            since_id: $options['since-id'] ?? null,
+            min_id: $options['min-id'] ?? null,
             limit: $options['limit'] ?? null,
         );
 
